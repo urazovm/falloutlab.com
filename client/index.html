@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr" class="uk-notouch">
+    <head>
+    <link rel="icon"
+      type="image/png"
+      href="/images/favicon.png">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="p:domain_verify" content="ab3a4df3ea999abfc406d51b06518e55"/>
+        <title>Fallout 4 Lab</title>
+
+
+        <link rel="stylesheet" href="bower_components/uikit/css/uikit.min.css" />
+        <link rel="stylesheet" href="bower_components/uikit/css/uikit.almost-flat.min.css" />
+
+
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/system.js/dist/system.js"></script>
+        <script src="bower_components/angular2/bundles/angular2.dev.js"></script>
+        <script src="bower_components/angular2/bundles/router.dev.js"></script>
+        <script src="bower_components/angular2/bundles/http.dev.js"></script>
+
+
+
+    </head>
+<body data-uk-observe="">
+    <my-app></my-app>
+    <script>
+        System.config({
+          packages: {
+            'scripts': {defaultExtension: 'js'}
+          }
+        });
+
+        System.import('bower_components/uikit/js/uikit.min.js');
+        System.import('scripts/bootstrap.js');
+    </script>
+    <script src="http://secure.falloutlab.local/livereload.js"></script>
+</html>

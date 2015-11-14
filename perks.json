@@ -1,0 +1,10 @@
+{
+  "ids": {
+    "perks": 2
+  },
+  "models": {
+    "perks": {
+      "1": "{\"idIntern\":\"0001DAFE\",\"name\":\"Iron Fist\",\"rank\":1,\"attribute\":\"Strength\",\"attributeLevel\":1,\"characterLevel\":0,\"description\":\"Channel your chi to unleash devastating fury! Punching attacks do 20% more damage to your opponent.\",\"id\":1}"
+    }
+  }
+}

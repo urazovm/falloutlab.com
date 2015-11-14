@@ -1,0 +1,15 @@
+{
+  "name": "yowebapp",
+  "version": "0.0.1",
+  "dependencies": {
+    "uikit": "~2.23.0",
+    "system.js": "~0.19.5",
+    "es5-shim": "~4.3.0",
+    "font-awesome": "~4.4.0",
+    "axios": "~0.7.0",
+    "es6-shim": "~0.33.9",
+    "marked": "~0.3.5",
+    "CodeMirror": "~5.8.0"
+  },
+  "devDependencies": {}
+}

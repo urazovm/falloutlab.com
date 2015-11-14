@@ -1,0 +1,32 @@
+{
+  "name": "alex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular2": "2.0.0-alpha.46",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "loopback": "^2.22.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^2.1.0",
+    "loopback-connector-mysql": "^2.2.0",
+    "loopback-datasource-juggler": "^2.39.0",
+    "serve-favicon": "^2.0.1",
+    "systemjs": "^0.19.5",
+    "gulp-connect": "^2.2.0",
+    "gulp-exec": "^2.1.2",
+    "gulp-install": "^0.6.0",
+    "gulp-nodemon": "^2.0.4",
+    "gulp-typescript": "^2.9.2",
+    "gulp": "^3.9.0",
+    "gulp-sync": "^0.1.4",
+    "jshint": "^2.5.6"
+  },
+  "devDependencies": {
+  }
+}

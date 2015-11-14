@@ -1,0 +1,12 @@
+{
+  "perks": {
+    "name": "perks",
+    "connector": "memory",
+    "file": "perks.json"
+  },
+  "common": {
+    "name": "common",
+    "connector": "memory",
+    "file": "common.json"
+  }
+}

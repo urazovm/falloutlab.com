@@ -1,0 +1,46 @@
+{
+  "name": "perks",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "idIntern": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "rank": {
+      "type": "number",
+      "required": true
+    },
+    "attribute": {
+      "type": "string",
+      "required": true
+    },
+    "attributeLevel": {
+      "type": "number",
+      "required": true
+    },
+    "characterLevel": {
+      "type": "number",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
