@@ -4,15 +4,25 @@ import {BaseResource} from './BaseResource';
 import {Http} from 'angular2/http';
 
 export class PerkModel {
-    id: number;
     name: string;
+    rank: number;
+    attribute: string;
+    attributeLevel: number;
+    characterLevel: number;
     description: string;
+    id: string;
+    idInternal: string;
 
-    constructor(modelData?: any) {
-        if (modelData) {
-            this.id = modelData.id;
-            this.name = modelData.name;
-            this.description = modelData.description;
+    constructor(model: any) {
+        if (model) {
+            this.id = model.id;
+            this.idInternal = model.idInternal;
+            this.name = model.name;
+            this.rank = model.rank;
+            this.attribute = model.attribute;
+            this.attributeLevel = model.attributeLevel;
+            this.characterLevel = model.characterLevel;
+            this.description = model.description;
         }
     }
 }

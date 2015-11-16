@@ -45,6 +45,9 @@ gulp.task('server', function () {
     script: 'server/server.js'
   , ext: 'js html'
   , env: { 'NODE_ENV': 'development' }
+  , watch: [
+    'server/**'
+    ]
   })
 })
 

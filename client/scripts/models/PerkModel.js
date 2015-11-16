@@ -19,11 +19,16 @@ var angular2_1 = require('angular2/angular2');
 var BaseResource_1 = require('./BaseResource');
 var http_1 = require('angular2/http');
 var PerkModel = (function () {
-    function PerkModel(modelData) {
-        if (modelData) {
-            this.id = modelData.id;
-            this.name = modelData.name;
-            this.description = modelData.description;
+    function PerkModel(model) {
+        if (model) {
+            this.id = model.id;
+            this.idInternal = model.idInternal;
+            this.name = model.name;
+            this.rank = model.rank;
+            this.attribute = model.attribute;
+            this.attributeLevel = model.attributeLevel;
+            this.characterLevel = model.characterLevel;
+            this.description = model.description;
         }
     }
     return PerkModel;
