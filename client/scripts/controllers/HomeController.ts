@@ -4,7 +4,7 @@ import {Component, View} from 'angular2/angular2';
 import {TerminalComponent} from '../components/TerminalComponent';
 
 @Component({
-    selector: 'home'
+ //   selector: 'home'
 })
 
 @View({

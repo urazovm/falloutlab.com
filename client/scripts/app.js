@@ -10,12 +10,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var angular2_1 = require('angular2/angular2');
 var router_1 = require('angular2/router');
 var HomeController_1 = require('./controllers/HomeController');
+var PerksPlannerController_1 = require('./controllers/PerksPlannerController');
 var App = (function () {
     function App() {
     }
     App = __decorate([
         router_1.RouteConfig([
             { path: '/', as: 'HomeController', component: HomeController_1.HomeController },
+            { path: '/perks', as: 'PerksPlannerController', component: PerksPlannerController_1.PerksPlannerController }
         ]),
         angular2_1.Component({
             selector: 'my-app'

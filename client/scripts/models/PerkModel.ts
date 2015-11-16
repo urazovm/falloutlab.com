@@ -5,14 +5,14 @@ import {Http} from 'angular2/http';
 
 export class PerkModel {
     id: number;
-    path: string;
-    perkId: number;
+    name: string;
+    description: string;
 
     constructor(modelData?: any) {
         if (modelData) {
             this.id = modelData.id;
-            this.path = modelData.path;
-            this.perkId = modelData.perk_id;
+            this.name = modelData.name;
+            this.description = modelData.description;
         }
     }
 }

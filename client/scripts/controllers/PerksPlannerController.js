@@ -8,17 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     }
 };
 var angular2_1 = require('angular2/angular2');
-var TerminalComponent_1 = require('../components/TerminalComponent');
-var HomeController = (function () {
-    function HomeController() {
+var PerksPlannerComponent_1 = require('../components/PerksPlannerComponent');
+var PerksPlannerController = (function () {
+    function PerksPlannerController() {
     }
-    HomeController = __decorate([
+    PerksPlannerController = __decorate([
         angular2_1.Component({}),
         angular2_1.View({
-            template: "\n        <div>\n            <terminal />\n        </div>\n    ",
-            directives: [TerminalComponent_1.TerminalComponent]
+            template: "\n        <div>\n            <perks-planner />\n        </div>\n    ",
+            directives: [PerksPlannerComponent_1.PerksPlannerComponent]
         })
-    ], HomeController);
-    return HomeController;
+    ], PerksPlannerController);
+    return PerksPlannerController;
 })();
-exports.HomeController = HomeController;
+exports.PerksPlannerController = PerksPlannerController;

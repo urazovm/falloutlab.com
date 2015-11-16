@@ -22,8 +22,8 @@ var PerkModel = (function () {
     function PerkModel(modelData) {
         if (modelData) {
             this.id = modelData.id;
-            this.path = modelData.path;
-            this.perkId = modelData.perk_id;
+            this.name = modelData.name;
+            this.description = modelData.description;
         }
     }
     return PerkModel;

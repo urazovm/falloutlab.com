@@ -6,7 +6,11 @@
     "compression": {},
     "cors": {
       "params": {
-        "origin": true,
+        "origin": [
+          "http://falloutlab.local",
+          "http://falloutlab.com",
+          "http://localhost"
+        ],
         "credentials": true,
         "maxAge": 86400
       }

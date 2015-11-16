@@ -5,6 +5,7 @@
   "options": {
     "validateUpsert": true
   },
+  "plural": "perk",
   "properties": {
     "id": {
       "type": "number",

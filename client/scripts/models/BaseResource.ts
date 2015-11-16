@@ -64,6 +64,27 @@ export abstract class BaseResource {
         });
     }
 
+    find(filter: IFilter = null) {
+        return new Promise((resolve, reject) => {
+            let url = this.config.apiUrl + '/api/' + this.modelName;
+            // if (filter) {
+            //     url = url + "?filter=" + JSON.stringify(filter);
+
+            //     console.log("URL", url);
+            // }
+
+            this.http.get(url)
+                .map(res => res.json())
+                .subscribe(res => {
+                    if (res.error) {
+                        reject(res.error);
+                    } else {
+                        resolve(this.mapListToModelList(res));
+                    }
+                });
+        });
+    }
+
     update(model) {
         return new Promise((resolve, reject) => {
             let url = this.config.apiUrl + '/api/' + this.modelName;

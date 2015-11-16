@@ -63,6 +63,27 @@ var BaseResource = (function () {
             });
         });
     };
+    BaseResource.prototype.find = function (filter) {
+        var _this = this;
+        if (filter === void 0) { filter = null; }
+        return new Promise(function (resolve, reject) {
+            var url = _this.config.apiUrl + '/api/' + _this.modelName;
+            // if (filter) {
+            //     url = url + "?filter=" + JSON.stringify(filter);
+            //     console.log("URL", url);
+            // }
+            _this.http.get(url)
+                .map(function (res) { return res.json(); })
+                .subscribe(function (res) {
+                if (res.error) {
+                    reject(res.error);
+                }
+                else {
+                    resolve(_this.mapListToModelList(res));
+                }
+            });
+        });
+    };
     BaseResource.prototype.update = function (model) {
         var _this = this;
         return new Promise(function (resolve, reject) {
