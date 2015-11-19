@@ -33,9 +33,9 @@ var PlayerModel = (function () {
         this.luck = 0;
         if (modelData) {
             this.level = modelData.level;
-            this.currentPerks = Array();
-            this.desiredPerks = Array();
-            this.dislikePerks = Array();
+            this.currentPerks = modelData.currentPerks;
+            this.desiredPerks = modelData.desiredPerks;
+            this.dislikePerks = modelData.dislikePerks;
             this.strength = modelData.strength;
             this.perception = modelData.perception;
             this.endurance = modelData.endurance;
@@ -52,7 +52,28 @@ var CurrentPlayerModel = (function (_super) {
     __extends(CurrentPlayerModel, _super);
     function CurrentPlayerModel() {
         _super.call(this);
+        this.callBackList = [];
+        console.log('initialized');
     }
+    CurrentPlayerModel.prototype.onChanges = function (callback) {
+        console.log('push', this.callBackList);
+        this.callBackList.push(callback);
+    };
+    CurrentPlayerModel.prototype.updated = function () {
+        this.callBackList.forEach(function (callback) { return callback(true); });
+    };
+    CurrentPlayerModel.prototype.dislike = function (perk) {
+        this.dislikePerks.push(perk);
+        this.updated();
+    };
+    CurrentPlayerModel.prototype.like = function (perk) {
+        this.desiredPerks.push(perk);
+        this.updated();
+    };
+    CurrentPlayerModel.prototype.current = function (perk) {
+        this.currentPerks.push(perk);
+        this.updated();
+    };
     CurrentPlayerModel = __decorate([
         angular2_1.Injectable()
     ], CurrentPlayerModel);

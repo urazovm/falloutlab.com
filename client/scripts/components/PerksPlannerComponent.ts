@@ -1,127 +1,14 @@
 ///<reference path="../../bower_components/angular2/angular2.d.ts" />
 
-import {Component, View, NgFor, NgIf, Inject, Observable} from 'angular2/angular2';
-import {PerkResource, PerkModel} from '../models/PerkModel';
-import {PlayerModel, CurrentPlayerModel} from '../models/PlayerModel';
+import {Component, View, NgFor, NgIf, Inject} from 'angular2/angular2';
+import {PerkResource, PerkModel, PlayerPerk} from '../models/PerkModel';
+import {CurrentPlayerModel} from '../models/PlayerModel';
 import {PerksPlannerTableComponent} from './PerksPlannerTableComponent';
-
-class PlayerPerk {
-    perk: PerkModel;
-    player: PlayerModel;
-
-    constructor(perk, player) {
-        this.perk = perk;
-        this.player = player;
-    }
-
-    isAvailable() {
-        if (this.isCurrent()) {
-            return false;
-        }
-
-        if (this.isDislike()) {
-            return false;
-        }
-
-        if (! this.fitSpecial()) {
-            return false;
-        }
-
-        if (!this.fitRank()) {
-            return false;
-        }
-        // Fit SPECIAL
-        // Fit Rank
-        // not desired or Required for desired
-        return true;
-    }
-
-    fitSpecial() {
-        if (this.perk.attributeLevel > this.player[this.perk.attribute.toLowerCase()]) {
-            return false;
-        }
-
-        return true;
-    }
-
-    fitRank() {
-        if (this.player.level > this.perk.characterLevel) {
-            return false;
-        }
-
-        return true;
-    }
-
-    isBlocked() {
-        if (this.isAvailable()) {
-            return false;
-        }
-
-        // Not SPECIAL Or Not Fit Rank
-        // not desired or Required for desired
-        return true;
-    }
-
-    isCurrent() {
-        // Is current
-        return this.playerHasPerk(this.perk);
-    }
-
-    playerHasPerk(perk: PerkModel) {
-        for (var i = this.player.currentPerks.length - 1; i >= 0; i--) {
-            if (this.player.currentPerks[i].idInternal === perk.idInternal) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    isDislike() {
-        if (this.isCurrent()) {
-            return false;
-        }
-
-        // dislike and not required for desired
-        return this.playerIsDislikePerk(this.perk);
-    }
-
-    playerIsDislikePerk(perk: PerkModel) {
-        for (var i = this.player.dislikePerks.length - 1; i >= 0; i--) {
-            if (this.player.dislikePerks[i].idInternal === perk.idInternal) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    isPreferable() {
-        if (this.isCurrent()) {
-            return false;
-        }
-
-        // dislike and not required for desired
-        return this.playerIsDesiredPerk(this.perk);
-    }
-
-    playerIsDesiredPerk(perk: PerkModel) {
-        for (var i = this.player.desiredPerks.length - 1; i >= 0; i--) {
-            if (this.player.desiredPerks[i].idInternal === perk.idInternal) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
 
 @Component({
     selector: 'perks-planner',
 //    properties: ['playerModel'],
-    providers: [PerkResource, CurrentPlayerModel],
-//    bindings: [CurrentPlayerModel]
-//    changeDetection: ChangeDetectionStrategy.OnPush
+    providers: [PerkResource]
 })
 
 @View({
@@ -131,10 +18,10 @@ class PlayerPerk {
                 <h1>Perks Planner</h1>
             </h1>
 
-            <perks-planner-table [perks]="currentPerks" name="Current Perks"></perks-planner-table>
-            <perks-planner-table [perks]="availablePerks" name="Available Perks"></perks-planner-table>
-            <perks-planner-table [perks]="blockedPerks" name="Blocked Perks"></perks-planner-table>
-            <perks-planner-table [perks]="dislikePerks" name="Dislike Perks"></perks-planner-table>
+            <perks-planner-table [perks]="currentPerks" name="Current Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="availablePerks" name="Available Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="blockedPerks" name="Blocked Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="dislikePerks" name="Dislike Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
         </article>
     `,
     directives: [NgFor, NgIf, PerksPlannerTableComponent]
@@ -144,14 +31,27 @@ export class PerksPlannerComponent {
     allPerks: Array<PerkModel> = [];
     perkResource: PerkResource;
     playerModel: CurrentPlayerModel;
-    currentPerks: Array<PerkModel> = [];
-    availablePerks: Array<PerkModel> = [];
-    blockedPerks: Array<PerkModel> = [];
-    dislikePerks: Array<PerkModel> = [];
+    currentPerks: Array<PlayerPerk> = [];
+    availablePerks: Array<PlayerPerk> = [];
+    blockedPerks: Array<PlayerPerk> = [];
+    dislikePerks: Array<PlayerPerk> = [];
+    dependeciesList: Array<PerkModel> = [];
 
-    constructor(@Inject(PerkResource) perkResource: PerkResource, @Inject(CurrentPlayerModel) currentPlayerModel: CurrentPlayerModel) {
+    constructor( @Inject(PerkResource) perkResource: PerkResource, @Inject(CurrentPlayerModel) currentPlayerModel: CurrentPlayerModel) {
         this.perkResource = perkResource;
-        this.playerModel  = currentPlayerModel;
+        this.playerModel = currentPlayerModel;
+
+        this.loadPerks();
+
+        this.playerModel.onChanges(() => {
+            console.log('test');
+            this.sortPerks();
+        });
+    }
+
+    loadPerks() {
+        console.log('loading');
+        console.log(this);
 
         this.perkResource.find()
             .then(perkList => {
@@ -159,38 +59,106 @@ export class PerksPlannerComponent {
 
                 this.sortPerks();
             });
-
-//        setInterval(() => this.sortPerks(), 2000);
     }
 
+    onPerkLike(playerPerk: PlayerPerk) {
+        this.playerModel.like(playerPerk.perk);
+    }
+
+    onPerkDislike(playerPerk: PlayerPerk) {
+        console.log('dislike');
+        this.playerModel.dislike(playerPerk.perk);
+    }
+
+    onPerkCurrent(playerPerk: PlayerPerk) {
+        console.log('current');
+        this.playerModel.current(playerPerk.perk);
+    }
+
+
+    // onInit() {
+    //     //this.loadPerks();
+    //     setTimeout(() => this.loadPerks(), 3000);
+    // }
+
     onChanges(change) {
-        console.log('cjange', change);
+        console.log('change', change);
+    }
+
+    getDependeciesList() {
+        var dependencyList = [];
+
+        this.playerModel.desiredPerks.forEach(desiredPerk => {
+            this.allPerks.forEach(perk => {
+                if (desiredPerk.name === perk.name && !this.playerHasPerk(perk)) {
+                    if (perk.rank < desiredPerk.rank) {
+                        dependencyList.push(perk);
+                    }
+                }
+            });
+        });
+
+        return dependencyList;
+    }
+
+    playerHasPerk(perk: PerkModel) {
+        for (var i = this.playerModel.currentPerks.length - 1; i >= 0; i--) {
+            if (this.playerModel.currentPerks[i].idInternal === perk.idInternal) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     sortPerks() {
-        this.currentPerks = [];
+        this.currentPerks   = [];
         this.availablePerks = [];
-        this.blockedPerks = [];
-        this.dislikePerks = [];
+        this.blockedPerks   = [];
+        this.dislikePerks   = [];
+        this.dependeciesList = this.getDependeciesList();
 
         this.allPerks.forEach(perk => {
-            var userPerk = new PlayerPerk(perk, this.playerModel);
+            var userPerk = new PlayerPerk(perk, this.playerModel, this.allPerks, this.dependeciesList);
 
             if (userPerk.isCurrent()) {
-                this.currentPerks.push(userPerk.perk);
+                this.currentPerks.push(userPerk);
+            } else if (userPerk.isAvailable()) {
+                this.availablePerks.push(userPerk);
+            } else if (userPerk.isBlocked()) {
+                this.blockedPerks.push(userPerk);
+            } else if (userPerk.isDislike()) {
+                this.dislikePerks.push(userPerk);
+            } else {
+                throw new Exception('Unknown list for perk: ' + userPerk.perk.name);
+            }
+        });
+
+        console.log(this);
+
+        this.orderPerks(this.currentPerks);
+        this.orderPerks(this.availablePerks);
+        this.orderPerks(this.blockedPerks);
+        this.orderPerks(this.dislikePerks);
+    }
+
+    orderPerks(perksList) {
+        perksList.forEach((item, index) =>  {
+            const isPreferable = item.isPreferable() ? 9000 : 1000;
+            const isDependency = item.isDependency() ? 900 : 100;
+            const level        = 90 - item.level;
+
+            item.order = isPreferable + isDependency + level;
+        });
+
+        perksList.sort(function (a, b) {
+            if (a.order > b.order) {
+                return -1;
+            } else if (a.order < b.order) {
+                return 1;
             }
 
-            if (userPerk.isAvailable()) {
-                this.availablePerks.push(userPerk.perk);
-            }
-
-            if (userPerk.isBlocked()) {
-                this.blockedPerks.push(userPerk.perk);
-            }
-
-            if (userPerk.isDislike()) {
-                this.dislikePerks.push(userPerk.perk);
-            }
+            return 0;
         });
     }
 }

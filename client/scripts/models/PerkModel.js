@@ -22,7 +22,7 @@ var PerkModel = (function () {
     function PerkModel(model) {
         if (model) {
             this.id = model.id;
-            this.idInternal = model.idInternal;
+            this.idInternal = model.idIntern;
             this.name = model.name;
             this.rank = model.rank;
             this.attribute = model.attribute;
@@ -51,3 +51,123 @@ var PerkResource = (function (_super) {
     return PerkResource;
 })(BaseResource_1.BaseResource);
 exports.PerkResource = PerkResource;
+var PlayerPerk = (function () {
+    function PlayerPerk(perk, player, allPerks, dependeciesList) {
+        this.perk = perk;
+        this.player = player;
+        this.allPerks = allPerks;
+        this.dependeciesList = dependeciesList;
+    }
+    PlayerPerk.prototype.isAvailable = function () {
+        if (this.isCurrent()) {
+            return false;
+        }
+        if (this.isDislike() && !this.isDependency()) {
+            return false;
+        }
+        if (this.hasDependecies()) {
+            console.log('has dependencies');
+            return false;
+        }
+        if (!this.fitSpecial()) {
+            return false;
+        }
+        if (!this.fitRank()) {
+            return false;
+        }
+        return true;
+    };
+    PlayerPerk.prototype.fitSpecial = function () {
+        if (this.perk.attributeLevel > this.player[this.perk.attribute.toLowerCase()]) {
+            return false;
+        }
+        return true;
+    };
+    PlayerPerk.prototype.fitRank = function () {
+        if (this.player.level > this.perk.characterLevel) {
+            return false;
+        }
+        return true;
+    };
+    PlayerPerk.prototype.isBlocked = function () {
+        if (this.isCurrent()) {
+            return false;
+        }
+        if (this.isDislike()) {
+            return false;
+        }
+        if (this.isAvailable()) {
+            return false;
+        }
+        // Not SPECIAL Or Not Fit Rank
+        // not desired or Required for desired
+        return true;
+    };
+    PlayerPerk.prototype.isCurrent = function () {
+        // Is current
+        return this.playerHasPerk(this.perk);
+    };
+    PlayerPerk.prototype.playerHasPerk = function (perk) {
+        for (var i = this.player.currentPerks.length - 1; i >= 0; i--) {
+            if (this.player.currentPerks[i].idInternal === perk.idInternal) {
+                return true;
+            }
+        }
+        return false;
+    };
+    PlayerPerk.prototype.isDislike = function () {
+        if (this.isCurrent()) {
+            return false;
+        }
+        if (this.isDependency()) {
+            return false;
+        }
+        // dislike and not required for desired
+        return this.playerIsDislikePerk(this.perk);
+    };
+    PlayerPerk.prototype.isDependency = function () {
+        var _this = this;
+        var isDependency = false;
+        this.dependeciesList.forEach(function (item) {
+            if (item.name === _this.perk.name && item.rank === _this.perk.rank) {
+                isDependency = true;
+            }
+        });
+        return isDependency;
+    };
+    PlayerPerk.prototype.hasDependecies = function () {
+        var _this = this;
+        var hasDependecies = false;
+        this.dependeciesList.forEach(function (item) {
+            if (item.name === _this.perk.name && item.rank < _this.perk.rank) {
+                hasDependecies = true;
+            }
+        });
+        return hasDependecies;
+    };
+    PlayerPerk.prototype.playerIsDislikePerk = function (perk) {
+        for (var i = this.player.dislikePerks.length - 1; i >= 0; i--) {
+            if (this.player.dislikePerks[i].idInternal === perk.idInternal) {
+                return true;
+            }
+        }
+        return false;
+    };
+    PlayerPerk.prototype.isPreferable = function () {
+        if (this.isCurrent()) {
+            return false;
+        }
+        // dislike and not required for desired
+        return this.playerIsDesiredPerk(this.perk);
+    };
+    PlayerPerk.prototype.playerIsDesiredPerk = function (perk) {
+        for (var i = this.player.desiredPerks.length - 1; i >= 0; i--) {
+            if (this.player.desiredPerks[i].idInternal === perk.idInternal) {
+                return true;
+            }
+        }
+        return false;
+    };
+    return PlayerPerk;
+})();
+exports.PlayerPerk = PlayerPerk;

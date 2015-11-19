@@ -7,7 +7,7 @@
                         <a [router-link]="['/HomeController']">Terminal Unlock</a>
                     </li>
                     <li>
-                        <a [router-link]="['/PerksPlannerController']">Level up planner</a>
+                        <a [router-link]="['/PerksPlannerController', {playerModel: currentPlayerModel}]">Level up planner</a>
                     </li>
                 </ul>
                 <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas=""></a>
@@ -19,7 +19,7 @@
                     <div><router-outlet></router-outlet></div>
                 </div>
                 <div class="uk-width-medium-1-4">
-                <player-stats />
+                    <player-stats [player-model]="currentPlayerModel"/>
                 </div>
             </div>
 

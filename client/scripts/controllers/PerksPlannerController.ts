@@ -1,10 +1,12 @@
 ///<reference path="../../bower_components/angular2/bundles/typings/angular2/angular2.d.ts" />
 
-import {Component, View} from 'angular2/angular2';
+import {Component, View, Inject} from 'angular2/angular2';
 import {PerksPlannerComponent} from '../components/PerksPlannerComponent';
+import {PlayerResource, CurrentPlayerModel} from '../models/PlayerModel';
 
 @Component({
   //  selector: 'home'
+//      properties['playerModel']
 })
 
 @View({
@@ -17,6 +19,13 @@ import {PerksPlannerComponent} from '../components/PerksPlannerComponent';
 })
 
 export class PerksPlannerController {
-    constructor() {
+    playerModel: CurrentPlayerModel;
+
+    constructor(@Inject(CurrentPlayerModel) currentPlayerModel: CurrentPlayerModel) {
+        this.playerModel = currentPlayerModel;
+
+        this.playerModel.onChanges(() => {
+            console.log('persist');
+        });
     }
 }

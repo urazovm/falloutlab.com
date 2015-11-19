@@ -1,5 +1,5 @@
 
-var perksList = require('./fallout.converted.json');
+var perksList  = require('./fallout.converted.json');
 const userData = require('./fallout.userSettings.json');
 
 
@@ -35,7 +35,7 @@ class PerkModel {
     }
 }
 
-var perkModels = perksList.map((item) => new PerkModel(item))
+var perkModels = perksList.map((item) => new PerkModel(item));
 
 class User {
     level: number;

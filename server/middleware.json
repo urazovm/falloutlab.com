@@ -9,7 +9,7 @@
         "origin": [
           "http://falloutlab.local",
           "http://falloutlab.com",
-          "http://localhost"
+          "http://localhost:8080"
         ],
         "credentials": true,
         "maxAge": 86400

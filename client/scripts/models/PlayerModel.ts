@@ -19,17 +19,17 @@ export class PlayerModel {
 
     constructor(modelData?: any) {
         if (modelData) {
-            this.level = modelData.level;
-            this.currentPerks = Array<PerkModel>;
-            this.desiredPerks = Array<PerkModel>;
-            this.dislikePerks = Array<PerkModel>;
-            this.strength = modelData.strength;
-            this.perception = modelData.perception;
-            this.endurance = modelData.endurance;
-            this.charisma = modelData.charisma;
+            this.level        = modelData.level;
+            this.currentPerks = modelData.currentPerks;
+            this.desiredPerks = modelData.desiredPerks;
+            this.dislikePerks = modelData.dislikePerks;
+            this.strength     = modelData.strength;
+            this.perception   = modelData.perception;
+            this.endurance    = modelData.endurance;
+            this.charisma     = modelData.charisma;
             this.intelligence = modelData.intelligence;
-            this.agility = modelData.agility;
-            this.luck = modelData.luck;
+            this.agility      = modelData.agility;
+            this.luck         = modelData.luck;
         }
     }
 }
@@ -37,8 +37,37 @@ export class PlayerModel {
 @Injectable()
 
 export class CurrentPlayerModel extends PlayerModel {
+    callBackList = [];
+
     constructor() {
         super();
+
+        console.log('initialized');
+    }
+
+    onChanges(callback) {
+        console.log('push', this.callBackList);
+
+        this.callBackList.push(callback);
+    }
+
+    updated() {
+        this.callBackList.forEach(callback => callback(true));
+    }
+
+    dislike(perk: PerkModel) {
+        this.dislikePerks.push(perk);
+        this.updated();
+    }
+
+    like(perk: PerkModel) {
+        this.desiredPerks.push(perk);
+        this.updated();
+    }
+
+    current(perk: PerkModel) {
+        this.currentPerks.push(perk);
+        this.updated();
     }
 }
 

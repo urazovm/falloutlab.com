@@ -4,7 +4,6 @@
   },
   "models": {
     "perks": {
-      "0": "{\"idIntern\":\"0001DAFE\",\"name\":\"Iron Fist\",\"rank\":1,\"attribute\":\"Strength\",\"attributeLevel\":1,\"characterLevel\":0,\"description\":\"Channel your chi to unleash devastating fury! Punching attacks do 20% more damage to your opponent.\",\"id\":0}",
       "1": "{\"idIntern\":\"0001DAFE\",\"name\":\"Iron Fist\",\"rank\":1,\"attribute\":\"Strength\",\"attributeLevel\":1,\"characterLevel\":0,\"description\":\"Channel your chi to unleash devastating fury! Punching attacks do 20% more damage to your opponent.\",\"id\":1}",
       "2": "{\"idIntern\":\"0001DAFF\",\"name\":\"Iron Fist\",\"rank\":2,\"attribute\":\"Strength\",\"attributeLevel\":1,\"characterLevel\":9,\"description\":\"Punching attacks now do 40% more damage and can disarm your opponent.\",\"id\":2}",
       "3": "{\"idIntern\":\"0001DB00\",\"name\":\"Iron Fist\",\"rank\":3,\"attribute\":\"Strength\",\"attributeLevel\":1,\"characterLevel\":18,\"description\":\"Punching attacks now do 60% more damage. Unarmed Power Attacks have a chance to cripple one of your opponent's limbs.\",\"id\":3}",

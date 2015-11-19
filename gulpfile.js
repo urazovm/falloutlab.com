@@ -43,7 +43,7 @@ gulp.task('typescript', function () {
 gulp.task('server', function () {
   nodemon({
     script: 'server/server.js'
-  , ext: 'js html'
+  , ext: 'js html json'
   , env: { 'NODE_ENV': 'development' }
   , watch: [
     'server/**'
