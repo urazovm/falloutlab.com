@@ -7,7 +7,7 @@
   "player": {
     "name": "player",
     "connector": "memory",
-    "file": "player.json"
+    "file": "playerdata.json"
   },
   "common": {
     "name": "common",

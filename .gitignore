@@ -20,4 +20,5 @@ bower_components/
 node_modules/
 npm-debug.log
 common.json
+playerdata.json
 desktop.ini

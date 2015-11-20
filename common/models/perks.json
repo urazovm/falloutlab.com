@@ -1,11 +1,11 @@
 {
   "name": "perks",
+  "plural": "perk",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "plural": "perk",
   "properties": {
     "id": {
       "type": "number",

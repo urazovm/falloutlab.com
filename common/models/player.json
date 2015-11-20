@@ -1,0 +1,65 @@
+{
+  "name": "player",
+  "plural": "player",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "level": {
+      "type": "number"
+    },
+    "strength": {
+      "type": "number",
+      "required": true
+    },
+    "perception": {
+      "type": "number",
+      "required": true
+    },
+    "endurance": {
+      "type": "number",
+      "required": true
+    },
+    "charisma": {
+      "type": "number",
+      "required": true
+    },
+    "intelligence": {
+      "type": "number",
+      "required": true
+    },
+    "agility": {
+      "type": "number",
+      "required": true
+    },
+    "luck": {
+      "type": "number",
+      "required": true
+    },
+    "currentPerks": {
+      "type": [
+        "object"
+      ]
+    },
+    "desiredPerks": {
+      "type": [
+        "object"
+      ]
+    },
+    "dislikePerks": {
+      "type": [
+        "object"
+      ]
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
