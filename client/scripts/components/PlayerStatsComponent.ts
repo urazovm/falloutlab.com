@@ -19,15 +19,44 @@ import {PlayerModel, CurrentPlayerModel} from '../models/PlayerModel';
         <div class="uk-panel">
             <h3 class="uk-panel-title">S.P.E.C.I.A.L</h3>
             <ul class="uk-list uk-list-line">
-                <li>rank: {{playerModel?.rank}} <span (click)="onRankIncrease()">plus</span></li>
-                <li>Strength: {{playerModel?.strength}} <span (click)="onIncrease('strength')">plus</span></li>
-                <li>Perception: {{playerModel?.perception}} <span (click)="onIncrease('perception')">plus</span></li>
-                <li>Endurance: {{playerModel?.endurance}} <span (click)="onIncrease('endurance')">plus</span></li>
-                <li>Charisma: {{playerModel?.charisma}} <span (click)="onIncrease('charisma')">plus</span></li>
-                <li>Intelligence: {{playerModel?.intelligence}} <span (click)="onIncrease('intelligence')">plus</span></li>
-                <li>Agility: {{playerModel?.agility}} <span (click)="onIncrease('agility')">plus</span></li>
-                <li>Luck: {{playerModel?.luck}} <span (click)="onIncrease('luck')">plus</span></li>
+                <li><b>Level</b>: {{playerModel?.level}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onRankDecrease()">-</a>
+                    <a class="uk-button" (click)="onRankIncrease()">+</a>
+                </li>
+                <li><b>Strength</b>: {{playerModel?.strength}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('strength')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('strength')">+</a>
+                </li>
+                <li><b>Perception</b>: {{playerModel?.perception}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('perception')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('perception')">+</a>
+                </li>
+                <li><b>Endurance</b>: {{playerModel?.endurance}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('endurance')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('endurance')">+</a>
+                </li>
+                <li><b>Charisma</b>: {{playerModel?.charisma}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('charisma')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('charisma')">+</a>
+                </li>
+                <li><b>Intelligence</b>: {{playerModel?.intelligence}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('intelligence')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('intelligence')">+</a>
+                </li>
+                <li><b>Agility</b>: {{playerModel?.agility}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('agility')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('agility')">+</a>
+                </li>
+                <li><b>Luck</b>: {{playerModel?.luck}}
+                    <a class="uk-button" *ng-if="playerModel?.level > 0" (click)="onDecrease('luck')">-</a>
+                    <a class="uk-button" *ng-if="playerModel?.level < 10" (click)="onIncrease('luck')">+</a>
+                </li>
             </ul>
+            <div class="uk-form" *ng-if="! playerModel?.userId">
+                <div>Enter your email to keep your data, otherwise you will lost alll information after page refresh:</div>
+                <div><input class="uk-input" #inputword (keyup)="doneTyping($event)" /> <a class="uk-button"  (click)="setUserId(inputword)">set / load</a></div>
+            </div>
+
             <iframe src="https://ghbtns.com/github-btn.html?user=cajoy&repo=falloutlab.com&type=watch&count=true&size=large&v=2" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
         </div>
     `,
@@ -57,9 +86,45 @@ export class PlayerStatsComponent {
         this.playerModel.updated();
     }
 
+    onDecrease(type: string) {
+        if (this.playerModel[type] === 0) {
+            return;
+        }
+
+        --this.playerModel[type];
+
+        this.playerModel.updated();
+    }
+
     onRankIncrease(type: string) {
         ++this.playerModel.level;
 
         this.playerModel.updated();
+    }
+
+    onRankDecrease(type: string) {
+        if (this.playerModel.level < 1)  {
+            return;
+        }
+
+        --this.playerModel.level;
+
+        console.log(this.playerModel.level);
+
+        this.playerModel.updated();
+    }
+
+    doneTyping($event) {
+        if ($event.which === 13) {
+            this.playerModel.userId = $event.target.value;
+
+            this.playerModel.updated();
+        }
+    }
+
+    setUserId(input) {
+        this.playerModel.userId = input.value;
+
+        this.playerModel.setId();
     }
 }

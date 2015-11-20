@@ -127,8 +127,6 @@ export class TerminalComponent {
     }
 
     buttonColor(word, button) {
-        console.log(word, button);
-
         if (word.lettersIn == null) {
             return '';
         }

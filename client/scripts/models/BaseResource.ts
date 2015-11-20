@@ -3,7 +3,8 @@ import {Config} from '../Config';
 import {Inject} from 'angular2/angular2';
 
 interface IFilter {
-    include: any;
+    include?: any;
+    where?: any;
 }
 
 export abstract class BaseResource {
@@ -67,11 +68,9 @@ export abstract class BaseResource {
     find(filter: IFilter = null) {
         return new Promise((resolve, reject) => {
             let url = this.config.apiUrl + '/api/' + this.modelName;
-            // if (filter) {
-            //     url = url + "?filter=" + JSON.stringify(filter);
-
-            //     console.log("URL", url);
-            // }
+            if (filter) {
+                url = url + "?filter=" + JSON.stringify(filter);
+            }
 
             this.http.get(url)
                 .map(res => res.json())
@@ -85,7 +84,7 @@ export abstract class BaseResource {
         });
     }
 
-    update(model) {
+    upsert(model) {
         return new Promise((resolve, reject) => {
             let url = this.config.apiUrl + '/api/' + this.modelName;
             // if (filter) {

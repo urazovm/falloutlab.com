@@ -68,10 +68,9 @@ var BaseResource = (function () {
         if (filter === void 0) { filter = null; }
         return new Promise(function (resolve, reject) {
             var url = _this.config.apiUrl + '/api/' + _this.modelName;
-            // if (filter) {
-            //     url = url + "?filter=" + JSON.stringify(filter);
-            //     console.log("URL", url);
-            // }
+            if (filter) {
+                url = url + "?filter=" + JSON.stringify(filter);
+            }
             _this.http.get(url)
                 .map(function (res) { return res.json(); })
                 .subscribe(function (res) {
@@ -84,7 +83,7 @@ var BaseResource = (function () {
             });
         });
     };
-    BaseResource.prototype.update = function (model) {
+    BaseResource.prototype.upsert = function (model) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var url = _this.config.apiUrl + '/api/' + _this.modelName;

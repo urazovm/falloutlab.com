@@ -6,28 +6,31 @@ import {PlayerPerk} from '../models/PerkModel';
 @Component({
     selector: 'perks-planner-table',
     properties: ['perks', 'name'],
-    events: ['like: like', 'dislike: dislike', 'current: current']
+    events: ['like: like', 'dislike: dislike', 'current: current', 'uncurrent: uncurrent']
 })
 
 @View({
     template: `
     <div>
-        <h4>{{name}}</h4>
-        <ul class="uk-list">
+        <h3>{{name}}</h3>
+        <ul class="uk-list uk-list-line">
            <li *ng-for="#playerPerk of perks">
            <div class="uk-grid">
                 <div class="uk-width-2-10">
-                    <div *ng-if="playerPerk.isPreferable()">desirable</div>
-                    <div *ng-if="playerPerk.isDislike()">dislike</div>
-                    <div *ng-if="playerPerk.isBlocked()">blocked</div>
-                    <div *ng-if="playerPerk.isDependency()">dependency</div>
-                    <div>  <a *ng-if="! playerPerk.isPreferable()" (click)="onLikeClick(playerPerk)">Like</a>
-                    <a *ng-if="! playerPerk.isDislike()" (click)="onDislikeClick(playerPerk)">Dislike</a>
-                    <a *ng-if="! playerPerk.isCurrent()" (click)="onCurrentClick(playerPerk)">I have it</a>
-                    <a *ng-if="! playerPerk.isDislike()" (click)="onUnCurrentClick(playerPerk)">I don't have it</a></div>
-
+                    <div class="uk-button-group">
+                        <a class="uk-button uk-button-small uk-button-success" *ng-if="!playerPerk.isPreferable() && ! playerPerk.isCurrent()" (click)="onLikeClick(playerPerk)">Like</a>
+                        <a class="uk-button uk-button-small uk-button-danger" *ng-if="! playerPerk.isCurrent() && ! playerPerk.isDislike() && ! playerPerk.isDependency()" (click)="onDislikeClick(playerPerk)">Dislike</a>
+                        <a class="uk-button uk-button-small uk-button-primary" *ng-if="! playerPerk.isCurrent() &&  ! playerPerk.isBlocked()" (click)="onCurrentClick(playerPerk)">I have it</a>
+                        <a class="uk-button uk-button-small" *ng-if="playerPerk.isCurrent()" (click)="onUnCurrentClick(playerPerk)">I don't have it</a>
+                    </div>
                 </div>
-                <div class="uk-width-8-10"><i>{{ playerPerk.perk.name }}</i><br/>{{ playerPerk.perk.description }}</div>
+                <div class="uk-width-8-10"><b>{{ playerPerk.perk.name }}</b>
+                    <span class="uk-badge uk-badge-success" *ng-if="playerPerk.isPreferable()">desirable</span>
+                    <span class="uk-badge uk-badge-danger" *ng-if="playerPerk.isDislike()">dislike</span>
+                    <!--span class="uk-badge uk-badge-warning" *ng-if="playerPerk.isBlocked()">blocked</span-->
+                    <span class="uk-badge uk-badge-warning" *ng-if="! playerPerk.fitRank()">level: {{playerPerk.perk.characterLevel}}</span>
+                    <span class="uk-badge uk-badge-warning" *ng-if="! playerPerk.fitSpecial()"> {{playerPerk.perk.attribute}}: {{playerPerk.perk.attributeLevel}}</span>
+                    <span class="uk-badge uk-badge-warning" *ng-if="playerPerk.isDependency()">dependency</span>: {{ playerPerk.perk.description }}</div>
             </div>
            </li>
         </ul>
@@ -42,6 +45,7 @@ export class PerksPlannerTableComponent {
     like = new EventEmitter();
     dislike = new EventEmitter();
     current = new EventEmitter();
+    uncurrent = new EventEmitter();
 
     constructor() {}
 
@@ -55,5 +59,10 @@ export class PerksPlannerTableComponent {
 
     onCurrentClick(playerPerk: PlayerPerk) {
         this.current.next(playerPerk);
+    }
+
+
+    onUnCurrentClick(playerPerk: PlayerPerk) {
+        this.uncurrent.next(playerPerk);
     }
 }

@@ -62,17 +62,16 @@ var PlayerPerk = (function () {
         if (this.isCurrent()) {
             return false;
         }
-        if (this.isDislike() && !this.isDependency()) {
-            return false;
-        }
-        if (this.hasDependecies()) {
-            console.log('has dependencies');
-            return false;
-        }
         if (!this.fitSpecial()) {
             return false;
         }
         if (!this.fitRank()) {
+            return false;
+        }
+        if (this.isDislike() && !this.isDependency()) {
+            return false;
+        }
+        if (this.hasDependecies()) {
             return false;
         }
         return true;
@@ -84,7 +83,7 @@ var PlayerPerk = (function () {
         return true;
     };
     PlayerPerk.prototype.fitRank = function () {
-        if (this.player.level > this.perk.characterLevel) {
+        if (this.player.level < this.perk.characterLevel) {
             return false;
         }
         return true;
@@ -143,6 +142,15 @@ var PlayerPerk = (function () {
                 hasDependecies = true;
             }
         });
+        if (this.perk.rank > 1) {
+            this.allPerks.forEach(function (item) {
+                if (item.name === _this.perk.name) {
+                    if (_this.perk.rank > item.rank && !_this.playerHasPerk(item)) {
+                        hasDependecies = true;
+                    }
+                }
+            });
+        }
         return hasDependecies;
     };
     PlayerPerk.prototype.playerIsDislikePerk = function (perk) {

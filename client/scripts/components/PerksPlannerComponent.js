@@ -27,14 +27,11 @@ var PerksPlannerComponent = (function () {
         this.playerModel = currentPlayerModel;
         this.loadPerks();
         this.playerModel.onChanges(function () {
-            console.log('test');
             _this.sortPerks();
         });
     }
     PerksPlannerComponent.prototype.loadPerks = function () {
         var _this = this;
-        console.log('loading');
-        console.log(this);
         this.perkResource.find()
             .then(function (perkList) {
             _this.allPerks = perkList;
@@ -52,10 +49,9 @@ var PerksPlannerComponent = (function () {
         console.log('current');
         this.playerModel.current(playerPerk.perk);
     };
-    // onInit() {
-    //     //this.loadPerks();
-    //     setTimeout(() => this.loadPerks(), 3000);
-    // }
+    PerksPlannerComponent.prototype.onPerkUncurrent = function (playerPerk) {
+        this.playerModel.uncurrent(playerPerk.perk);
+    };
     PerksPlannerComponent.prototype.onChanges = function (change) {
         console.log('change', change);
     };
@@ -71,6 +67,21 @@ var PerksPlannerComponent = (function () {
                 }
             });
         });
+        // this.allPerks.forEach(availablePerk => {
+        //     this.allPerks.forEach(availablePerkCompare => {
+        //         if (availablePerk.name === 'Big Leagues') {
+        //             console.log(availablePerk, availablePerkCompare);
+        //         }
+        //         if (availablePerk.name === availablePerkCompare.name && !this.playerHasPerk(availablePerkCompare) && !this.playerHasPerk(availablePerkCompare)) {
+        //             if (availablePerkCompare.rank > availablePerk.rank) {
+        //                 if (availablePerk.name === 'Big Leagues') {
+        //                     console.log('pushed compare');
+        //                 }
+        //                 dependencyList.push(availablePerkCompare);
+        //             }
+        //         }
+        //     });
+        // });
         return dependencyList;
     };
     PerksPlannerComponent.prototype.playerHasPerk = function (perk) {
@@ -106,7 +117,6 @@ var PerksPlannerComponent = (function () {
                 throw new Exception('Unknown list for perk: ' + userPerk.perk.name);
             }
         });
-        console.log(this);
         this.orderPerks(this.currentPerks);
         this.orderPerks(this.availablePerks);
         this.orderPerks(this.blockedPerks);
@@ -116,7 +126,8 @@ var PerksPlannerComponent = (function () {
         perksList.forEach(function (item, index) {
             var isPreferable = item.isPreferable() ? 9000 : 1000;
             var isDependency = item.isDependency() ? 900 : 100;
-            var level = 90 - item.level;
+            var level = 90 - item.perk.characterLevel;
+            //const level = 0;
             item.order = isPreferable + isDependency + level;
         });
         perksList.sort(function (a, b) {
@@ -136,7 +147,7 @@ var PerksPlannerComponent = (function () {
             providers: [PerkModel_1.PerkResource]
         }),
         angular2_1.View({
-            template: "\n        <article class=\"uk-article\">\n            <h1 class=\"uk-article-title\">\n                <h1>Perks Planner</h1>\n            </h1>\n\n            <perks-planner-table [perks]=\"currentPerks\" name=\"Current Perks\" (like)=\"onPerkLike($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"availablePerks\" name=\"Available Perks\" (like)=\"onPerkLike($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"blockedPerks\" name=\"Blocked Perks\" (like)=\"onPerkLike($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"dislikePerks\" name=\"Dislike Perks\" (like)=\"onPerkLike($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n        </article>\n    ",
+            template: "\n        <article class=\"uk-article\">\n            <h1 class=\"uk-article-title\">\n                <h1>Perks Planner</h1>\n            </h1>\n\n            <perks-planner-table [perks]=\"currentPerks\" name=\"Current Perks\" (like)=\"onPerkLike($event)\" (uncurrent)=\"onPerkUncurrent($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"availablePerks\" name=\"Available Perks\" (like)=\"onPerkLike($event)\" (uncurrent)=\"onPerkUncurrent($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"blockedPerks\" name=\"Blocked Perks\" (like)=\"onPerkLike($event)\" (uncurrent)=\"onPerkUncurrent($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n            <perks-planner-table [perks]=\"dislikePerks\" name=\"Dislike Perks\" (like)=\"onPerkLike($event)\" (uncurrent)=\"onPerkUncurrent($event)\" (dislike)=\"onPerkDislike($event)\" (current)=\"onPerkCurrent($event)\"></perks-planner-table>\n        </article>\n    ",
             directives: [angular2_1.NgFor, angular2_1.NgIf, PerksPlannerTableComponent_1.PerksPlannerTableComponent]
         }),
         __param(0, angular2_1.Inject(PerkModel_1.PerkResource)),

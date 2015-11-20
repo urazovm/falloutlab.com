@@ -64,21 +64,19 @@ export class PlayerPerk {
             return false;
         }
 
-        if (this.isDislike() && !this.isDependency()) {
-            return false;
-        }
-
-        if (this.hasDependecies()) {
-            console.log('has dependencies');
-
-            return false;
-        }
-
         if (!this.fitSpecial()) {
             return false;
         }
 
         if (!this.fitRank()) {
+            return false;
+        }
+
+        if (this.isDislike() && !this.isDependency()) {
+            return false;
+        }
+
+        if (this.hasDependecies()) {
             return false;
         }
 
@@ -94,7 +92,7 @@ export class PlayerPerk {
     }
 
     fitRank() {
-        if (this.player.level > this.perk.characterLevel) {
+        if (this.player.level < this.perk.characterLevel) {
             return false;
         }
 
@@ -167,6 +165,16 @@ export class PlayerPerk {
                 hasDependecies = true;
             }
         });
+
+        if (this.perk.rank > 1) {
+            this.allPerks.forEach(item => {
+                if (item.name === this.perk.name) {
+                     if (this.perk.rank > item.rank && ! this.playerHasPerk(item)) {
+                         hasDependecies = true;
+                     }
+                }
+            });
+        }
 
         return hasDependecies;
     }

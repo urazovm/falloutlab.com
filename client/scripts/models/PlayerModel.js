@@ -31,6 +31,9 @@ var PlayerModel = (function () {
         this.intelligence = 0;
         this.agility = 0;
         this.luck = 0;
+        this.setData(modelData);
+    }
+    PlayerModel.prototype.setData = function (modelData) {
         if (modelData) {
             this.level = modelData.level;
             this.currentPerks = modelData.currentPerks;
@@ -43,8 +46,10 @@ var PlayerModel = (function () {
             this.intelligence = modelData.intelligence;
             this.agility = modelData.agility;
             this.luck = modelData.luck;
+            this.userId = modelData.userId;
+            this.id = modelData.id;
         }
-    }
+    };
     return PlayerModel;
 })();
 exports.PlayerModel = PlayerModel;
@@ -53,25 +58,65 @@ var CurrentPlayerModel = (function (_super) {
     function CurrentPlayerModel() {
         _super.call(this);
         this.callBackList = [];
-        console.log('initialized');
     }
     CurrentPlayerModel.prototype.onChanges = function (callback) {
-        console.log('push', this.callBackList);
         this.callBackList.push(callback);
     };
     CurrentPlayerModel.prototype.updated = function () {
         this.callBackList.forEach(function (callback) { return callback(true); });
     };
     CurrentPlayerModel.prototype.dislike = function (perk) {
+        var _this = this;
         this.dislikePerks.push(perk);
+        this.currentPerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.currentPerks.splice(index, 1);
+            }
+        });
+        this.desiredPerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.desiredPerks.splice(index, 1);
+            }
+        });
         this.updated();
     };
     CurrentPlayerModel.prototype.like = function (perk) {
+        var _this = this;
         this.desiredPerks.push(perk);
+        this.currentPerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.currentPerks.splice(index, 1);
+            }
+        });
+        this.dislikePerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.dislikePerks.splice(index, 1);
+            }
+        });
         this.updated();
     };
     CurrentPlayerModel.prototype.current = function (perk) {
+        var _this = this;
         this.currentPerks.push(perk);
+        this.desiredPerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.desiredPerks.splice(index, 1);
+            }
+        });
+        this.dislikePerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.dislikePerks.splice(index, 1);
+            }
+        });
+        this.updated();
+    };
+    CurrentPlayerModel.prototype.uncurrent = function (perk) {
+        var _this = this;
+        this.currentPerks.forEach(function (item, index) {
+            if (item.id === perk.id) {
+                _this.currentPerks.splice(index, 1);
+            }
+        });
         this.updated();
     };
     CurrentPlayerModel = __decorate([

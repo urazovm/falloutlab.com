@@ -35,5 +35,9 @@
   "perks": {
     "dataSource": "perks",
     "public": true
+  },
+  "player": {
+    "dataSource": "player",
+    "public": true
   }
 }

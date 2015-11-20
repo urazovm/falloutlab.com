@@ -23,9 +23,5 @@ export class PerksPlannerController {
 
     constructor(@Inject(CurrentPlayerModel) currentPlayerModel: CurrentPlayerModel) {
         this.playerModel = currentPlayerModel;
-
-        this.playerModel.onChanges(() => {
-            console.log('persist');
-        });
     }
 }

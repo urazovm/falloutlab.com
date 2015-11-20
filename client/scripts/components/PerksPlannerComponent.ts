@@ -18,10 +18,10 @@ import {PerksPlannerTableComponent} from './PerksPlannerTableComponent';
                 <h1>Perks Planner</h1>
             </h1>
 
-            <perks-planner-table [perks]="currentPerks" name="Current Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
-            <perks-planner-table [perks]="availablePerks" name="Available Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
-            <perks-planner-table [perks]="blockedPerks" name="Blocked Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
-            <perks-planner-table [perks]="dislikePerks" name="Dislike Perks" (like)="onPerkLike($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="currentPerks" name="Current Perks" (like)="onPerkLike($event)" (uncurrent)="onPerkUncurrent($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="availablePerks" name="Available Perks" (like)="onPerkLike($event)" (uncurrent)="onPerkUncurrent($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="blockedPerks" name="Blocked Perks" (like)="onPerkLike($event)" (uncurrent)="onPerkUncurrent($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
+            <perks-planner-table [perks]="dislikePerks" name="Dislike Perks" (like)="onPerkLike($event)" (uncurrent)="onPerkUncurrent($event)" (dislike)="onPerkDislike($event)" (current)="onPerkCurrent($event)"></perks-planner-table>
         </article>
     `,
     directives: [NgFor, NgIf, PerksPlannerTableComponent]
@@ -44,15 +44,11 @@ export class PerksPlannerComponent {
         this.loadPerks();
 
         this.playerModel.onChanges(() => {
-            console.log('test');
             this.sortPerks();
         });
     }
 
     loadPerks() {
-        console.log('loading');
-        console.log(this);
-
         this.perkResource.find()
             .then(perkList => {
                 this.allPerks = perkList;
@@ -75,11 +71,9 @@ export class PerksPlannerComponent {
         this.playerModel.current(playerPerk.perk);
     }
 
-
-    // onInit() {
-    //     //this.loadPerks();
-    //     setTimeout(() => this.loadPerks(), 3000);
-    // }
+    onPerkUncurrent(playerPerk: PlayerPerk) {
+        this.playerModel.uncurrent(playerPerk.perk);
+    }
 
     onChanges(change) {
         console.log('change', change);
@@ -97,6 +91,25 @@ export class PerksPlannerComponent {
                 }
             });
         });
+
+        // this.allPerks.forEach(availablePerk => {
+        //     this.allPerks.forEach(availablePerkCompare => {
+        //         if (availablePerk.name === 'Big Leagues') {
+        //             console.log(availablePerk, availablePerkCompare);
+        //         }
+
+        //         if (availablePerk.name === availablePerkCompare.name && !this.playerHasPerk(availablePerkCompare) && !this.playerHasPerk(availablePerkCompare)) {
+        //             if (availablePerkCompare.rank > availablePerk.rank) {
+
+        //                 if (availablePerk.name === 'Big Leagues') {
+        //                     console.log('pushed compare');
+        //                 }
+
+        //                 dependencyList.push(availablePerkCompare);
+        //             }
+        //         }
+        //     });
+        // });
 
         return dependencyList;
     }
@@ -134,8 +147,6 @@ export class PerksPlannerComponent {
             }
         });
 
-        console.log(this);
-
         this.orderPerks(this.currentPerks);
         this.orderPerks(this.availablePerks);
         this.orderPerks(this.blockedPerks);
@@ -146,7 +157,8 @@ export class PerksPlannerComponent {
         perksList.forEach((item, index) =>  {
             const isPreferable = item.isPreferable() ? 9000 : 1000;
             const isDependency = item.isDependency() ? 900 : 100;
-            const level        = 90 - item.level;
+            const level = 90 - item.perk.characterLevel;
+            //const level = 0;
 
             item.order = isPreferable + isDependency + level;
         });

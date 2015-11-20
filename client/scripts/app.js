@@ -17,9 +17,90 @@ var PerksPlannerController_1 = require('./controllers/PerksPlannerController');
 var PlayerModel_1 = require('./models/PlayerModel');
 var PlayerStatsComponent_1 = require('./components/PlayerStatsComponent');
 var App = (function () {
-    function App(currentPlayerModel) {
+    function App(currentPlayerModel, playerResource) {
+        var _this = this;
+        this.playerModel = currentPlayerModel;
+        this.playerResource = playerResource;
+        // var fromLocalStorage = localStorage.getItem('currentPlayer');
+        var fromLocalStorageId = localStorage.getItem('currentPlayerId');
+        // console.log('ID', fromLocalStorageId);
+        // if (fromLocalStorage) {
+        //     this.playerModel.setData(JSON.parse(fromLocalStorage));
+        // }
+        if (fromLocalStorageId) {
+            this.loadByEmail(JSON.parse(fromLocalStorageId))
+                .then(function (record) {
+                _this.playerModel.setData(record);
+            }).catch(function (err) {
+                console.log(err);
+            });
+        }
+        this.playerModel.onChanges(function () {
+            if (!_this.playerModel.userId) {
+                return;
+            }
+            if (_this.playerModel.id) {
+                _this.playerResource.upsert(_this.playerModel)
+                    .then(function (record) {
+                    console.log(record);
+                    _this.playerModel.setData(record);
+                    console.log('HHH', JSON.stringify(record.id));
+                    localStorage.setItem('currentPlayerId', JSON.stringify(record.userId));
+                });
+            }
+            else {
+                _this.loadByEmail(_this.playerModel.userId)
+                    .then(function (record) {
+                    if (record) {
+                        localStorage.setItem('currentPlayerId', JSON.stringify(record.userId));
+                        _this.playerModel.setData(record);
+                    }
+                    else {
+                        _this.playerResource.upsert(_this.playerModel)
+                            .then(function (record) {
+                            console.log(record);
+                            _this.playerModel.setData(record);
+                            console.log('HHH', JSON.stringify(record.id));
+                            localStorage.setItem('currentPlayerId', JSON.stringify(record.userId));
+                        });
+                    }
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }
+            // if (this.playerModel.userId) {
+            //     this.playerResource.find({
+            //         where: {
+            //             userId: JSON.parse(fromLocalStorageId)
+            //         }
+            //     }).then((record: Array<CurrentPlayerModel>) => {
+            //         if (record[0].id) {
+            //             this.playerModel.setData(record[0]);
+            //         }
+            //     }).then(user)
+            // this.playerResource.upsert(this.playerModel)
+            //     .then((record: CurrentPlayerModel) => {
+            //         console.log(record);
+            //         this.playerModel.setData(record);
+            //         console.log('HHH', JSON.stringify(record.id));
+            //         localStorage.setItem('currentPlayerId', JSON.stringify(record.userId));
+            //     });
+            //            }
+            //            localStorage.setItem('currentPlayer', JSON.stringify(this.playerModel));
+        });
         this.playerModel = currentPlayerModel;
     }
+    App.prototype.loadByEmail = function (email) {
+        return this.playerResource.find({
+            where: {
+                userId: email
+            }
+        }).then(function (record) {
+            if (record[0].id) {
+                return record[0];
+            }
+        });
+    };
     App = __decorate([
         router_1.RouteConfig([
             { path: '/', as: 'HomeController', component: HomeController_1.HomeController },
@@ -27,13 +108,14 @@ var App = (function () {
         ]),
         angular2_1.Component({
             selector: 'my-app',
-            providers: [PlayerStatsComponent_1.PlayerStatsComponent, PlayerModel_1.CurrentPlayerModel]
+            providers: [PlayerStatsComponent_1.PlayerStatsComponent, PlayerModel_1.CurrentPlayerModel, PlayerModel_1.PlayerResource]
         }),
         angular2_1.View({
             templateUrl: 'views/app.html',
             directives: [[router_1.ROUTER_DIRECTIVES], PlayerStatsComponent_1.PlayerStatsComponent]
         }),
-        __param(0, angular2_1.Inject(PlayerModel_1.CurrentPlayerModel))
+        __param(0, angular2_1.Inject(PlayerModel_1.CurrentPlayerModel)),
+        __param(1, angular2_1.Inject(PlayerModel_1.PlayerResource))
     ], App);
     return App;
 })();

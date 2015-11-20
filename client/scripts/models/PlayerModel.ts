@@ -16,20 +16,28 @@ export class PlayerModel {
     intelligence: number = 0;
     agility: number = 0;
     luck: number = 0;
+    userId: string;
+    id: number;
 
     constructor(modelData?: any) {
+        this.setData(modelData);
+    }
+
+    setData(modelData?: any) {
         if (modelData) {
-            this.level        = modelData.level;
+            this.level = modelData.level;
             this.currentPerks = modelData.currentPerks;
             this.desiredPerks = modelData.desiredPerks;
             this.dislikePerks = modelData.dislikePerks;
-            this.strength     = modelData.strength;
-            this.perception   = modelData.perception;
-            this.endurance    = modelData.endurance;
-            this.charisma     = modelData.charisma;
+            this.strength = modelData.strength;
+            this.perception = modelData.perception;
+            this.endurance = modelData.endurance;
+            this.charisma = modelData.charisma;
             this.intelligence = modelData.intelligence;
-            this.agility      = modelData.agility;
-            this.luck         = modelData.luck;
+            this.agility = modelData.agility;
+            this.luck = modelData.luck;
+            this.userId = modelData.userId;
+            this.id = modelData.id;
         }
     }
 }
@@ -41,13 +49,9 @@ export class CurrentPlayerModel extends PlayerModel {
 
     constructor() {
         super();
-
-        console.log('initialized');
     }
 
     onChanges(callback) {
-        console.log('push', this.callBackList);
-
         this.callBackList.push(callback);
     }
 
@@ -57,16 +61,65 @@ export class CurrentPlayerModel extends PlayerModel {
 
     dislike(perk: PerkModel) {
         this.dislikePerks.push(perk);
+
+        this.currentPerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.currentPerks.splice(index, 1);
+            }
+        });
+
+        this.desiredPerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.desiredPerks.splice(index, 1);
+            }
+        });
+
         this.updated();
     }
 
     like(perk: PerkModel) {
         this.desiredPerks.push(perk);
+
+        this.currentPerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.currentPerks.splice(index, 1);
+            }
+        });
+
+        this.dislikePerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.dislikePerks.splice(index, 1);
+            }
+        });
+
         this.updated();
     }
 
     current(perk: PerkModel) {
         this.currentPerks.push(perk);
+
+        this.desiredPerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.desiredPerks.splice(index, 1);
+            }
+        });
+
+        this.dislikePerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.dislikePerks.splice(index, 1);
+            }
+        });
+
+        this.updated();
+    }
+
+    uncurrent(perk: PerkModel) {
+        this.currentPerks.forEach((item, index) => {
+            if (item.id === perk.id) {
+                this.currentPerks.splice(index, 1);
+            }
+        });
+
         this.updated();
     }
 }

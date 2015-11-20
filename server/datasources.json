@@ -4,6 +4,11 @@
     "connector": "memory",
     "file": "perks.json"
   },
+  "player": {
+    "name": "player",
+    "connector": "memory",
+    "file": "player.json"
+  },
   "common": {
     "name": "common",
     "connector": "memory",

@@ -74,7 +74,6 @@ var TerminalComponent = (function () {
         return isPossible;
     };
     TerminalComponent.prototype.buttonColor = function (word, button) {
-        console.log(word, button);
         if (word.lettersIn == null) {
             return '';
         }

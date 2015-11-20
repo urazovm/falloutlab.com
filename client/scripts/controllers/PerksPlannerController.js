@@ -16,9 +16,6 @@ var PlayerModel_1 = require('../models/PlayerModel');
 var PerksPlannerController = (function () {
     function PerksPlannerController(currentPlayerModel) {
         this.playerModel = currentPlayerModel;
-        this.playerModel.onChanges(function () {
-            console.log('persist');
-        });
     }
     PerksPlannerController = __decorate([
         angular2_1.Component({}),
