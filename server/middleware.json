@@ -9,6 +9,7 @@
         "origin": [
           "http://falloutlab.local",
           "http://falloutlab.com",
+          "https://falloutlab.com",
           "http://localhost:8080"
         ],
         "credentials": true,
