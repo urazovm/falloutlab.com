@@ -1,13 +1,13 @@
 export class Config {
-    public apiUrl = 'http://api.falloutlab.local';
+    public apiUrl = 'https://api.falloutlab.local';
 
     constructor() {
-        if (window.location.host === 'follow.falloutlab') {
-            this.apiUrl = 'https://api.follow.falloutlab';
+        if (window.location.host === 'falloutlab.com') {
+            this.apiUrl = 'https://api.falloutlab.com';
         }
 
         if (window.location.host === 'falloutlab.local') {
-            this.apiUrl = 'http://api.falloutlab.local';
+            this.apiUrl = 'https://api.falloutlab.local';
         }
 
         if (window.location.host === '127.0.0.1:8080') {
